@@ -1,5 +1,6 @@
 package com.forgeessentials.core;
 
+import com.forgeessentials.client.network.ClientNetworkHandler;
 import com.forgeessentials.core.commands.CommandFEDebug;
 import com.forgeessentials.core.commands.CommandFEInfo;
 import com.forgeessentials.core.commands.HelpFixer;
@@ -37,6 +38,7 @@ import com.forgeessentials.util.events.FEModuleEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModuleServerPreInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModuleServerStoppedEvent;
 import com.forgeessentials.util.events.ForgeEssentialsEventFactory;
+import com.forgeessentials.util.network.ServerNetworkHandler;
 import com.forgeessentials.util.selections.Point;
 import com.forgeessentials.util.selections.WarpPoint;
 import com.forgeessentials.util.selections.WorldPoint;
@@ -102,9 +104,8 @@ public class ForgeEssentials {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e)
 	{
-		FunctionHelper.netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("forgeessentials");
-		FunctionHelper.netHandler.registerMessage(S0PacketHandshake.class, S0PacketHandshake.class, 0, Side.SERVER);
-        FunctionHelper.netHandler.registerMessage(S1PacketSelectionUpdate.class, S1PacketSelectionUpdate.class, 1, Side.CLIENT);
+		ServerNetworkHandler.registerPacket(new S0PacketHandshake());
+        ServerNetworkHandler.registerPacket(new S1PacketSelectionUpdate());
         
 		FEDIR = new File(FunctionHelper.getBaseDir(), "/ForgeEssentials");
 		OutputHandler.felog.info("Forge Essentials version " + FEModContainer.version + " loading, reading config from " + FEDIR.getAbsolutePath());

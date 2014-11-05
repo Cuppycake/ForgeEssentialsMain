@@ -1,20 +1,16 @@
 package com.forgeessentials.economy;
 
 import com.forgeessentials.api.APIRegistry;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import com.forgeessentials.util.network.ServerNetworkHandler;
+import com.forgeessentials.util.network.ServerNetworkHandler.IFEPacket;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.play.client.C17PacketCustomPayload;
 
 import java.util.UUID;
 
-public class S4PacketEconomy implements IMessageHandler<S4PacketEconomy, IMessage>, IMessage
+public class S4PacketEconomy implements IFEPacket
 {
-
-    @Override public IMessage onMessage(S4PacketEconomy message, MessageContext ctx)
-    {
-        return new S4PacketEconomy(ctx.getServerHandler().playerEntity.getPersistentID());
-    }
 
     private UUID player;
 
@@ -26,13 +22,23 @@ public class S4PacketEconomy implements IMessageHandler<S4PacketEconomy, IMessag
     }
 
     @Override
-    public void fromBytes(ByteBuf buf){}
-
-    @Override public void toBytes(ByteBuf buf)
+    public String getDiscriminator()
     {
-        buf.writeInt(APIRegistry.wallet.getWallet(player));
+        return "econ";
+    }
+
+    @Override
+    public void onServerReceive(C17PacketCustomPayload packet, NetHandlerPlayServer handler, ByteBuf data)
+    {
+        ServerNetworkHandler.sendTo(new S4PacketEconomy(handler.playerEntity.getPersistentID()), handler.playerEntity);
 
     }
 
+    @Override
+    public ByteBuf getClientPayload(ByteBuf buf)
+    {
+        buf.writeInt(APIRegistry.wallet.getWallet(player));
+        return buf;
+    }
 }
 

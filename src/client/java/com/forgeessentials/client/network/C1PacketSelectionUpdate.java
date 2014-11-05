@@ -1,32 +1,34 @@
 package com.forgeessentials.client.network;
 
 import com.forgeessentials.client.ForgeEssentialsClient;
+import com.forgeessentials.client.network.ClientNetworkHandler.IFEClientPacket;
 import com.forgeessentials.client.util.ClientPoint;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
 
 @SideOnly(Side.CLIENT)
-public class C1PacketSelectionUpdate implements IMessageHandler<C1PacketSelectionUpdate, IMessage>, IMessage
+public class C1PacketSelectionUpdate implements IFEClientPacket
 {
 
     @Override
-    public IMessage onMessage(C1PacketSelectionUpdate message, MessageContext context)
+    public String getDiscriminator()
     {
-        return null;
+        return "sel";
     }
 
     @Override
-    public void fromBytes(ByteBuf byteBuf)
+    public void onClientReceive(S3FPacketCustomPayload packet, NetHandlerPlayClient handler, ByteBuf byteBuf)
     {
+        System.out.println(byteBuf.toString());
         if (byteBuf.readBoolean())
         {
             double x = byteBuf.readDouble();
             double y = byteBuf.readDouble();
             double z = byteBuf.readDouble();
+            System.out.println(x + y + z);
 
             ForgeEssentialsClient.info.setPoint1(new ClientPoint(x, y, z));
         }
@@ -51,6 +53,8 @@ public class C1PacketSelectionUpdate implements IMessageHandler<C1PacketSelectio
     }
 
     @Override
-    public void toBytes(ByteBuf byteBuf){} // noop - receiving only
-
+    public ByteBuf getServerPayload(ByteBuf write)
+    {
+        return null;
+    }
 }

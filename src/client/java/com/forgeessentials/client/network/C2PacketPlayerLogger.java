@@ -1,45 +1,32 @@
 package com.forgeessentials.client.network;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.forgeessentials.client.ForgeEssentialsClient;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import com.forgeessentials.client.network.ClientNetworkHandler.IFEClientPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
 
 @SideOnly(Side.CLIENT)
-public class C2PacketPlayerLogger implements IMessageHandler<C2PacketPlayerLogger, IMessage>, IMessage {
+public class C2PacketPlayerLogger implements IFEClientPacket
+{
 
     @Override
-    public IMessage onMessage(C2PacketPlayerLogger message, MessageContext ctx)
+    public String getDiscriminator()
+    {
+        return "pl";
+    }
+
+    @Override
+    public void onClientReceive(S3FPacketCustomPayload packet, NetHandlerPlayClient handler, ByteBuf data)
+    {
+        ForgeEssentialsClient.info.playerLogger = data.readBoolean();
+    }
+
+    @Override
+    public ByteBuf getServerPayload(ByteBuf write)
     {
         return null;
     }
-
-    private EntityPlayer player;
-
-    public C2PacketPlayerLogger()
-    {
-    }
-
-    public C2PacketPlayerLogger(EntityPlayer player)
-    {
-        this.player = player;
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf)
-    {
-        ForgeEssentialsClient.info.playerLogger = buf.readBoolean();
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf)
-    {
-    }
-
 }

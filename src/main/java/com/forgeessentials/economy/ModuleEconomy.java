@@ -22,9 +22,9 @@ import com.forgeessentials.util.events.FEModuleEvent.FEModuleInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModulePreInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModuleServerInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModuleServerStopEvent;
+import com.forgeessentials.util.network.ServerNetworkHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 
 import java.io.File;
 
@@ -46,7 +46,7 @@ public class ModuleEconomy {
     @SubscribeEvent
     public void preLoad(FEModulePreInitEvent e)
     {
-        FunctionHelper.netHandler.registerMessage(S4PacketEconomy.class, S4PacketEconomy.class, 4, Side.CLIENT);
+        ServerNetworkHandler.registerPacket(new S4PacketEconomy());
     }
 
     @SubscribeEvent

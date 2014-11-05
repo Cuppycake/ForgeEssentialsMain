@@ -1,25 +1,28 @@
 package com.forgeessentials.client.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import com.forgeessentials.client.network.ClientNetworkHandler.IFEClientPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
 
-public class C5PacketNoclip implements IMessageHandler<C5PacketNoclip, IMessage>, IMessage
+public class C5PacketNoclip implements IFEClientPacket
 {
 
     @Override
-    public void fromBytes(ByteBuf buf)
+    public String getDiscriminator()
     {
-        Minecraft.getMinecraft().thePlayer.noClip = buf.readBoolean();
+        return "noclip";
     }
 
     @Override
-    public void toBytes(ByteBuf buf){}
+    public void onClientReceive(S3FPacketCustomPayload packet, NetHandlerPlayClient handler, ByteBuf data)
+    {
+        Minecraft.getMinecraft().thePlayer.noClip = data.readBoolean();
+    }
 
     @Override
-    public IMessage onMessage(C5PacketNoclip message, MessageContext ctx)
+    public ByteBuf getServerPayload(ByteBuf write)
     {
         return null;
     }

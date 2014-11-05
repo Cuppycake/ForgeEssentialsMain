@@ -19,9 +19,9 @@ import com.forgeessentials.util.events.FEModuleEvent.FEModuleInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModulePreInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModuleServerInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModuleServerStopEvent;
+import com.forgeessentials.util.network.ServerNetworkHandler;
 import com.forgeessentials.util.selections.WorldPoint;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -154,8 +154,8 @@ public class ModulePlayerLogger {
             ModuleLauncher.instance.unregister("PlayerLogger");
         }
         OutputHandler.felog.info("PlayerLogger module is enabled. Loading...");
-        FunctionHelper.netHandler.registerMessage(S2PacketPlayerLogger.class, S2PacketPlayerLogger.class, 2, Side.CLIENT);
-        FunctionHelper.netHandler.registerMessage(S3PacketRollback.class, S3PacketRollback.class, 3, Side.CLIENT);
+        ServerNetworkHandler.registerPacket(new S2PacketPlayerLogger());
+        ServerNetworkHandler.registerPacket(new S3PacketRollback());
     }
 
     @SubscribeEvent

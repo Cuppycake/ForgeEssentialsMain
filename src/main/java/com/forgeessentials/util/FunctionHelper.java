@@ -49,8 +49,6 @@ import java.util.regex.Pattern;
 
 public final class FunctionHelper {
 
-	public static SimpleNetworkWrapper netHandler;
-
     public static final EventBus FE_INTERNAL_EVENTBUS = new EventBus();
 
 	/**

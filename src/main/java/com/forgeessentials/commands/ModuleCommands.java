@@ -10,15 +10,14 @@ import com.forgeessentials.commands.util.ConfigCmd;
 import com.forgeessentials.commands.util.MobTypeLoader;
 import com.forgeessentials.core.ForgeEssentials;
 import com.forgeessentials.core.moduleLauncher.FEModule;
-import com.forgeessentials.util.FunctionHelper;
 import com.forgeessentials.util.events.FEModuleEvent.FEModuleInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModulePreInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModuleServerInitEvent;
 import com.forgeessentials.util.events.FEModuleEvent.FEModuleServerStopEvent;
+import com.forgeessentials.util.network.ServerNetworkHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.command.ICommandSender;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.permissions.PermissionsManager.RegisteredPermValue;
@@ -41,7 +40,7 @@ public class ModuleCommands {
         MobTypeLoader.preLoad((FMLPreInitializationEvent)e.getFMLEvent());
         MinecraftForge.EVENT_BUS.register(eventHandler);
         FMLCommonHandler.instance().bus().register(eventHandler);
-        FunctionHelper.netHandler.registerMessage(S5PacketNoclip.class, S5PacketNoclip.class, 5, Side.CLIENT);
+        ServerNetworkHandler.registerPacket(new S5PacketNoclip());
     }
 
     @SubscribeEvent

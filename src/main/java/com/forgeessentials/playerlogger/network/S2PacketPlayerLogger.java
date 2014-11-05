@@ -1,18 +1,13 @@
 package com.forgeessentials.playerlogger.network;
 
+import com.forgeessentials.util.network.ServerNetworkHandler.IFEPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.play.client.C17PacketCustomPayload;
 
-public class S2PacketPlayerLogger implements IMessageHandler<S2PacketPlayerLogger, IMessage>, IMessage {
-
-    @Override
-    public IMessage onMessage(S2PacketPlayerLogger message, MessageContext ctx)
-    {
-        return null;
-    }
+public class S2PacketPlayerLogger implements IFEPacket
+{
 
     private EntityPlayer player;
 
@@ -26,15 +21,18 @@ public class S2PacketPlayerLogger implements IMessageHandler<S2PacketPlayerLogge
     }
 
     @Override
-    public void fromBytes(ByteBuf buf)
+    public String getDiscriminator()
     {
+        return "pl";
     }
 
     @Override
-    public void toBytes(ByteBuf buf)
+    public void onServerReceive(C17PacketCustomPayload packet, NetHandlerPlayServer handler, ByteBuf data) {}
+
+    @Override
+    public ByteBuf getClientPayload(ByteBuf buf)
     {
         buf.writeBoolean(player.getEntityData().getBoolean("lb"));
-
+        return buf;
     }
-
 }

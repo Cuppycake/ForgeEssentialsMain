@@ -1,35 +1,31 @@
 package com.forgeessentials.core.network;
 
 import com.forgeessentials.util.PlayerInfo;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import com.forgeessentials.util.network.ServerNetworkHandler.IFEPacket;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.play.client.C17PacketCustomPayload;
 
-public class S0PacketHandshake implements IMessageHandler<S0PacketHandshake, IMessage>, IMessage
+public class S0PacketHandshake implements IFEPacket
 {
+    public S0PacketHandshake(){}
+
     @Override
-    public IMessage onMessage(S0PacketHandshake message, MessageContext ctx)
+    public String getDiscriminator()
+    {
+        return "HS";
+    }
+
+    @Override
+    public void onServerReceive(C17PacketCustomPayload packet, NetHandlerPlayServer handler, ByteBuf data)
     {
         System.out.println("Received handshake packet");
-        PlayerInfo.getPlayerInfo(ctx.getServerHandler().playerEntity).setHasFEClient(true);
-        return null;// server
-    }
-
-    public S0PacketHandshake()
-    {
+        PlayerInfo.getPlayerInfo(handler.playerEntity).setHasFEClient(true);
     }
 
     @Override
-    public void fromBytes(ByteBuf buf)
+    public ByteBuf getClientPayload(ByteBuf buf)
     {
-        System.out.println(buf.readByte());
+        return null; // no reply to the client yet
     }
-
-    @Override
-    public void toBytes(ByteBuf buf)
-    {
-        buf.writeByte(1);
-    }
-
 }

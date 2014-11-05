@@ -1,28 +1,28 @@
 package com.forgeessentials.client.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import com.forgeessentials.client.network.ClientNetworkHandler.IFEClientPacket;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
 
-public class C4PacketEconomy implements IMessageHandler<C4PacketEconomy, IMessage>, IMessage
+public class C4PacketEconomy implements IFEClientPacket
 {
 
     @Override
-    public IMessage onMessage(C4PacketEconomy message, MessageContext ctx)
+    public String getDiscriminator()
     {
-        return null;
+        return "econ";
     }
 
-    public C4PacketEconomy(){}
-
     @Override
-    public void fromBytes(ByteBuf buf)
+    public void onClientReceive(S3FPacketCustomPayload packet, NetHandlerPlayClient handler, ByteBuf data)
     {
         //GuiEconomy.amount = buf.readInt();
     }
 
     @Override
-    public void toBytes(ByteBuf buf){}
-
+    public ByteBuf getServerPayload(ByteBuf write)
+    {
+        return null;
+    }
 }

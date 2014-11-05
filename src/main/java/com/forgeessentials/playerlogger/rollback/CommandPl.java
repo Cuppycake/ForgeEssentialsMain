@@ -2,8 +2,8 @@ package com.forgeessentials.playerlogger.rollback;
 
 import com.forgeessentials.core.commands.ForgeEssentialsCommandBase;
 import com.forgeessentials.playerlogger.network.S2PacketPlayerLogger;
-import com.forgeessentials.util.FunctionHelper;
 import com.forgeessentials.util.OutputHandler;
+import com.forgeessentials.util.network.ServerNetworkHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -61,7 +61,7 @@ public class CommandPl extends ForgeEssentialsCommandBase {
             sender.getEntityData().setBoolean("lb", false);
         }
 
-        FunctionHelper.netHandler.sendTo(new S2PacketPlayerLogger(sender), (EntityPlayerMP)sender);
+        ServerNetworkHandler.sendTo(new S2PacketPlayerLogger(sender), (EntityPlayerMP) sender);
     }
 
     @Override

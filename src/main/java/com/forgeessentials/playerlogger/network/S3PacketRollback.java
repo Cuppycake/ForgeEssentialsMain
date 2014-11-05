@@ -1,22 +1,16 @@
 package com.forgeessentials.playerlogger.network;
 
 import com.forgeessentials.playerlogger.BlockChange;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import com.forgeessentials.util.network.ServerNetworkHandler.IFEPacket;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.play.client.C17PacketCustomPayload;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class S3PacketRollback implements IMessageHandler<S3PacketRollback, IMessage>, IMessage
+public class S3PacketRollback implements IFEPacket
 {
-
-    @Override
-    public IMessage onMessage(S3PacketRollback message, MessageContext ctx)
-    {
-        return null;
-    }
 
     private int dim;
     private List<BlockChange> changes;
@@ -30,10 +24,16 @@ public class S3PacketRollback implements IMessageHandler<S3PacketRollback, IMess
     public S3PacketRollback(){}
 
     @Override
-    public void fromBytes(ByteBuf buf){}
+    public String getDiscriminator()
+    {
+        return "pl_rb";
+    }
 
     @Override
-    public void toBytes(ByteBuf buf)
+    public void onServerReceive(C17PacketCustomPayload packet, NetHandlerPlayServer handler, ByteBuf data){}
+
+    @Override
+    public ByteBuf getClientPayload(ByteBuf buf)
     {
         if (changes == null)
         {
@@ -57,7 +57,6 @@ public class S3PacketRollback implements IMessageHandler<S3PacketRollback, IMess
                 }
             }
         }
-
+        return buf;
     }
-
 }

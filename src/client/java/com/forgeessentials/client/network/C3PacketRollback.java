@@ -1,25 +1,23 @@
 package com.forgeessentials.client.network;
 
 import com.forgeessentials.client.ForgeEssentialsClient;
+import com.forgeessentials.client.network.ClientNetworkHandler.IFEClientPacket;
 import com.forgeessentials.client.util.ClientPoint;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
 
-public class C3PacketRollback implements IMessageHandler<C3PacketRollback, IMessage>, IMessage
+public class C3PacketRollback implements IFEClientPacket
 {
 
     @Override
-    public IMessage onMessage(C3PacketRollback message, MessageContext ctx)
+    public String getDiscriminator()
     {
-        return null;
+        return "pl_rb";
     }
 
-    public C3PacketRollback(){}
-
     @Override
-    public void fromBytes(ByteBuf buf)
+    public void onClientReceive(S3FPacketCustomPayload packet, NetHandlerPlayClient handler, ByteBuf buf)
     {
         byte id = buf.readByte();
         if (id == 0)
@@ -46,10 +44,11 @@ public class C3PacketRollback implements IMessageHandler<C3PacketRollback, IMess
                 }
             }
         }
-
     }
 
     @Override
-    public void toBytes(ByteBuf buf){}
-
+    public ByteBuf getServerPayload(ByteBuf write)
+    {
+        return null;
+    }
 }
